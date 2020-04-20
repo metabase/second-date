@@ -27,26 +27,54 @@
     OffsetDateTime :iso-offset-date-time
     ZonedDateTime  :iso-offset-date-time))
 
-(defn- format* [formatter t]
-  (when t
-    (if (t/instant? t)
-      (recur formatter (t/zoned-date-time t (t/zone-id "UTC")))
-      (t/format formatter t))))
-
 (defn format
-  "Format temporal value `t` as a ISO-8601 date/time/datetime string."
-  ^String [t]
-  (when t
-    (format* (temporal->iso-8601-formatter t) t)))
+  "Format any of the main `java.time` temporal instant classes as a String. Uses ISO-8601 by default, but `formatter`
+  can be a `java.time.format.DateTimeFormatter` or keywords naming static formatters as understood by
+  [`clojure.java-time`](https://github.com/dm3/clojure.java-time). Check the value of
+  `java-time.format/predefined-formatters` for all supported predefined formatters.
+
+    (second-date/format (t/zoned-date-time \"2020-04-01T15:01-07:00[US/Pacific]\"))
+    ;; -> \"2020-04-01T16:01:00-07:00\"
+
+    (second-date/format (t/offset-date-time \"2020-04-01T15:01-07:00\"))
+    ;; -> \"2020-04-01T16:01:00-07:00\"
+
+    (second-date/format (t/local-date-time \"2020-04-01T15:01\"))
+    ;; -> \"2020-04-01T15:01:00\"
+
+    ;; with a different formatter
+    (second-date/format :basic-iso-date (t/local-date-time \"2020-04-01T15:01\"))
+    ;; ->  \"20200401\"
+
+    ;; it even handles Instants
+    (second-date/format :iso-week-date (t/instant \"2020-04-01T15:01:00-07:00\"))
+    ;; \"2020-W14-3Z\""
+  (^String [t]
+   (when t
+     (format (temporal->iso-8601-formatter t) t)))
+
+  (^String [formatter t]
+   (when t
+     (if (t/instant? t)
+       (recur formatter (t/zoned-date-time t (t/zone-id "UTC")))
+       (t/format formatter t)))))
+
+;; replace the `T` with a space. Easy!
+(defn- replace-T-with-space [s]
+  (when s
+    (str/replace-first s #"(\d{2})T(\d{2})" "$1 $2")))
 
 (defn format-sql
   "Format a temporal value `t` as a SQL-style literal string (for most SQL databases). This is the same as ISO-8601 but
   uses a space rather than of a `T` to separate the date and time components."
-  ^String [t]
-  ;; replace the `T` with a space. Easy!
-  (str/replace-first (format t) #"(\d{2})T(\d{2})" "$1 $2"))
+  (^String [t]
+   (replace-T-with-space (format t)))
 
-(def ^:private add-units
+  (^String [formatter t]
+   (replace-T-with-space (format formatter t))))
+
+(def add-units
+  "Units supported by the `add` function."
   #{:millisecond :second :minute :hour :day :week :month :quarter :year})
 
 (defn add
@@ -76,7 +104,7 @@
 ;; TIMEZONE FIXME - we should add `:millisecond-of-second` (or `:fraction-of-second`?) and `:second-of-minute` as
 ;; well. Not sure where we'd use these, but we should have them for consistency
 (def extract-units
-  "Units which return a (numerical, periodic) component of a date"
+  "Units which return a (numerical, periodic) component of a date."
   #{:minute-of-hour
     :hour-of-day
     :day-of-week
@@ -87,8 +115,8 @@
     :iso-week-of-year
     :month-of-year
     :quarter-of-year
-    ;; TODO - in this namespace `:year` is something you can both extract and truncate to. In MBQL `:year` is a truncation
-    ;; operation. Maybe we should rename this unit to clear up the potential confusion (?)
+    ;; TODO - in this namespace `:year` is something you can both extract and truncate to. In MBQL `:year` is a
+    ;; truncation operation. Maybe we should rename this unit to clear up the potential confusion (?)
     :year})
 
 (def ^:private week-fields*
@@ -134,7 +162,7 @@
 
 (defmethod adjuster :default
   [k]
-  (throw (ex-info (format "No temporal adjuster named %s" k) {})))
+  (throw (ex-info (clojure.core/format "No temporal adjuster named %s" k) {})))
 
 (defmethod adjuster :first-day-of-week
   [_]
@@ -221,7 +249,7 @@
      (= unit :default)     t
      (extract-units unit)  (extract t unit)
      (truncate-units unit) (truncate t unit)
-     :else                 (throw (ex-info (format "Invalid unit: %s" unit) {:unit unit})))))
+     :else                 (throw (ex-info (clojure.core/format "Invalid unit: %s" unit) {:unit unit})))))
 
 (defn range
   "Get a start (by default, inclusive) and end (by default, exclusive) pair of instants for a `unit` span of time

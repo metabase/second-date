@@ -133,19 +133,12 @@ workflows:
           lein-command: bikeshed
 
       - lein:
-          name: yagni
-          requires:
-            - deps
-          lein-command: yagni
-
-      - lein:
           name: deploy
           requires:
             - bikeshed
             - docstring-checker
             - eastwood
             - namespace-decls
-            - yagni
             - tests
             - tests-java-11
           lein-command: deploy clojars

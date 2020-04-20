@@ -72,7 +72,7 @@
             (format "Extract %s from %s %s should be %s" unit (class t) t expected)))))
   (testing "second-date/extract with 1 arg (extract from now)"
     (is (= 2
-           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z"))
+           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z") (t/zone-id "UTC"))
              (second-date/extract :day-of-week))))))
 
 (deftest truncate-test
@@ -127,14 +127,15 @@
             (format "Truncate %s %s to %s should be %s" (class t) t unit expected)))))
   (testing "second-date/truncate with 1 arg (truncate now)"
     (is (= (t/zoned-date-time "2019-11-18T00:00Z[UTC]")
-           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z"))
+           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z") (t/zone-id "UTC"))
              (second-date/truncate :day))))))
 
 (deftest add-test
   (testing "with 2 args (datetime relative to now)"
     (is (= (t/zoned-date-time "2019-11-20T22:31Z[UTC]")
-           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z"))
+           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z") (t/zone-id "UTC"))
              (second-date/add :day 2)))))
+
   (testing "with 3 args"
     (let [t (t/zoned-date-time "2019-06-14T00:00:00.000Z[UTC]")]
       (doseq [[unit n expected] [[:second  5 "2019-06-14T00:00:05Z[UTC]"]
@@ -153,12 +154,14 @@
   (testing "with 1 arg (range relative to now)"
     (is (= {:start (t/zoned-date-time "2019-11-17T00:00Z[UTC]")
             :end   (t/zoned-date-time "2019-11-24T00:00Z[UTC]")}
-           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z"))
+           (t/with-clock (t/mock-clock (t/instant "2019-11-18T22:31:00Z") (t/zone-id "UTC"))
              (second-date/range :week)))))
+
   (testing "with 2 args"
     (is (= {:start (t/zoned-date-time "2019-10-27T00:00Z[UTC]")
             :end   (t/zoned-date-time "2019-11-03T00:00Z[UTC]")}
            (second-date/range (t/zoned-date-time "2019-11-01T15:29:00Z[UTC]") :week))))
+
   (testing "with 3 args (start/end inclusitivity options)"
     (testing "exclusive start"
       (is (= {:start (t/local-date-time "2019-10-31T23:59:59.999"), :end (t/local-date-time "2019-12-01T00:00")}

@@ -99,7 +99,7 @@
 
 (defn value
   "Define a section for a specific field such as `:hour-of-day` or `:minute-of-hour`. Refer to
-  `metabase.util.date-2.common/temporal-field` for all possible temporal fields names."
+  `second-date.common/temporal-field` for all possible temporal fields names."
   ([temporal-field-name]
    (fn [^DateTimeFormatterBuilder builder]
      (.appendValue builder (temporal-field temporal-field-name))))
@@ -122,7 +122,7 @@
   "Define a section for a fractional value, e.g. milliseconds or nanoseconds."
   [temporal-field-name min-val-width max-val-width & {:keys [decimal-point?]}]
   (fn [^DateTimeFormatterBuilder builder]
-    (.appendFraction builder (temporal-field temporal-field-name) 0 9 (boolean decimal-point?))))
+    (.appendFraction builder (temporal-field temporal-field-name) min-val-width max-val-width (boolean decimal-point?))))
 
 (defn zone-offset
   "Define a section for a timezone offset. e.g. `-08:00`."
@@ -142,7 +142,7 @@
     (optional "]"))))
 
 (defn formatter
-  "Return a new `DateTimeFormatter` from `sections`. See examples in `metabase.util.date-2.parse` for more details.
+  "Return a new `DateTimeFormatter` from `sections`. See examples in `second-date.parse` for more details.
 
     (formatter
      (case-insensitive

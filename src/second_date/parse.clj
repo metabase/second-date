@@ -108,7 +108,7 @@
    (b/optional
     (b/zone-id))))
 
-(def ^:private ^DateTimeFormatter formatter
+(def ^:private ^DateTimeFormatter default-formatter
   (b/formatter
    (b/case-insensitive
     (b/optional
@@ -121,6 +121,24 @@
      offset-formatter*))))
 
 (defn parse
-  "Parse a string into a `java.time` object."
-  [^String s]
-  (parse-with-formatter formatter s))
+  "Parse almost any temporal literal String to a `java.time` object.
+
+    (second-date/parse \"2020-04\")
+    ;; -> #object[java.time.LocalDate 0x1998e54f \"2020-04-01\"]
+
+    (second-date/parse \"2020-04-01\")
+    ;; -> #object[java.time.LocalDate 0x1998e54f \"2020-04-01\"]
+
+    (second-date/parse \"2020-04-01T15:01\")
+    ;; -> #object[java.time.LocalDateTime 0x121829b7 \"2020-04-01T15:01\"]
+
+    (second-date/parse \"2020-04-01T15:01-07:00\")
+    ;; -> #object[java.time.OffsetDateTime 0x7dc126b0 \"2020-04-01T15:01-07:00\"]
+
+    (second-date/parse \"2020-04-01T15:01-07:00[US/Pacific]\")
+    ;; -> #object[java.time.ZonedDateTime 0x351fb7c8 \"2020-04-01T15:01-07:00[US/Pacific]\"]"
+  (^Temporal [s]
+   (parse-with-formatter default-formatter s))
+
+  (^Temporal [formatter s]
+   (parse-with-formatter formatter s)))

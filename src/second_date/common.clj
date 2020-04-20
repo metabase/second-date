@@ -2,8 +2,6 @@
   (:require [clojure.string :as str])
   (:import [java.time.temporal ChronoField IsoFields TemporalField WeekFields]))
 
-;; TODO - not sure this belongs here, it seems to be a bit more general than just `date-2`.
-
 (defn static-instances
   "Utility function to get the static members of a class. Returns map of `lisp-case` keyword names of members -> value."
   ([^Class klass]
