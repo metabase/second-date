@@ -1,5 +1,5 @@
 (ns second-date.parse.builder
-  "Utility functions for programatically building a `DateTimeFormatter`. Easier to understand than chaining a hundred
+  "Utility functions for programmatically building a `DateTimeFormatter`. Easier to understand than chaining a hundred
   Java calls and trying to keep the structure straight.
 
   The basic idea here is you pass a number of `sections` to `formatter` to build a `DateTimeFormatter` — see
