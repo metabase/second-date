@@ -1,8 +1,7 @@
 [![License](https://img.shields.io/badge/license-Eclipse%20Public%20License-blue.svg?style=for-the-badge)](https://raw.githubusercontent.com/metabase/second-date/master/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/metabase/second-date?style=for-the-badge)](https://github.com/metabase/second-date/commits/)
 <!-- [![Codecov](https://img.shields.io/codecov/c/github/metabase/second-date?style=for-the-badge)](https://codecov.io/gh/metabase/second-date) -->
-[![cljdoc badge](https://img.shields.io/badge/dynamic/json?color=informational&label=cljdoc&query=results%5B%3F%28%40%5B%22artifact-id%22%5D%20%3D%3D%20%22toucan2%22%29%5D.version&url=https%3A%2F%2Fcljdoc.org%2Fapi%2Fsearch%3Fq%3Dio.github.camsaul%2Ftoucan2&style=for-the-badge)](https://cljdoc.org/d/io.github.metabase/second-date/CURRENT)
-
+[![cljdoc badge](https://img.shields.io/badge/dynamic/json?color=informational&label=cljdoc&query=results%5B%3F%28%40%5B%22artifact-id%22%5D%20%3D%3D%20%22toucan2%22%29%5D.version&url=https%3A%2F%2Fcljdoc.org%2Fapi%2Fsearch%3Fq%3Dio.github.metabase%2Fsecond-date&style=for-the-badge)](https://cljdoc.org/d/io.github.metabase/second-date/CURRENT)
 
 # Second Date
 
