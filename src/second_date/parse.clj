@@ -1,11 +1,15 @@
 (ns second-date.parse
-  (:require [clojure.string :as str]
-            [java-time :as t]
-            [second-date.common :as common]
-            [second-date.parse.builder :as b])
-  (:import [java.time LocalDateTime OffsetDateTime OffsetTime ZonedDateTime ZoneOffset]
-           java.time.format.DateTimeFormatter
-           [java.time.temporal Temporal TemporalAccessor TemporalField TemporalQueries]))
+  (:require
+   [clojure.string :as str]
+   [java-time.api :as t]
+   [second-date.common :as common]
+   [second-date.parse.builder :as b])
+  (:import
+   (java.time LocalDateTime OffsetDateTime OffsetTime ZonedDateTime ZoneOffset)
+   (java.time.format DateTimeFormatter)
+   (java.time.temporal TemporalAccessor TemporalField TemporalQueries)))
+
+(set! *warn-on-reflection* true)
 
 (def ^:private ^{:arglists '([temporal-accessor query])} query
   (let [queries {:local-date  (TemporalQueries/localDate)
@@ -38,7 +42,7 @@
 
 (defn parse-with-formatter
   "Parse a String with a DateTimeFormatter, returning an appropriate instance of an `java.time` temporal class."
-  ^Temporal [formattr s]
+  [formattr s]
   {:pre [((some-fn string? nil?) s)]}
   (when-not (str/blank? s)
     (let [formattr          (t/formatter formattr)
@@ -65,13 +69,13 @@
         [:zone   :date]     (ZonedDateTime/of  local-date (t/local-time 0) zone-id)
         [:offset :date]     (OffsetDateTime/of local-date (t/local-time 0) zone-offset)
         [:local  :date]     local-date
-        [:zone   :time]     (OffsetTime/of local-time zone-offset)
+        [:zone   :time]     (OffsetTime/of local-time (or zone-offset (common/standard-offset zone-id)))
         [:offset :time]     (OffsetTime/of local-time zone-offset)
         [:local  :time]     local-time
         (throw (ex-info (format "Don't know how to parse %s using format %s" (pr-str s) (pr-str formattr))
-                 {:s                s
-                  :formatter        formattr
-                  :supported-fields (all-supported-fields temporal-accessor)}))))))
+                        {:s                s
+                         :formatter        formattr
+                         :supported-fields (all-supported-fields temporal-accessor)}))))))
 
 (def ^:private ^DateTimeFormatter date-formatter*
   (b/formatter
@@ -108,7 +112,7 @@
    (b/optional
     (b/zone-id))))
 
-(def ^:private ^DateTimeFormatter default-formatter
+(def ^:private ^DateTimeFormatter formatter
   (b/formatter
    (b/case-insensitive
     (b/optional
@@ -121,24 +125,6 @@
      offset-formatter*))))
 
 (defn parse
-  "Parse almost any temporal literal String to a `java.time` object.
-
-    (second-date/parse \"2020-04\")
-    ;; -> #object[java.time.LocalDate 0x1998e54f \"2020-04-01\"]
-
-    (second-date/parse \"2020-04-01\")
-    ;; -> #object[java.time.LocalDate 0x1998e54f \"2020-04-01\"]
-
-    (second-date/parse \"2020-04-01T15:01\")
-    ;; -> #object[java.time.LocalDateTime 0x121829b7 \"2020-04-01T15:01\"]
-
-    (second-date/parse \"2020-04-01T15:01-07:00\")
-    ;; -> #object[java.time.OffsetDateTime 0x7dc126b0 \"2020-04-01T15:01-07:00\"]
-
-    (second-date/parse \"2020-04-01T15:01-07:00[US/Pacific]\")
-    ;; -> #object[java.time.ZonedDateTime 0x351fb7c8 \"2020-04-01T15:01-07:00[US/Pacific]\"]"
-  (^Temporal [s]
-   (parse-with-formatter default-formatter s))
-
-  (^Temporal [formatter s]
-   (parse-with-formatter formatter s)))
+  "Parse a string into a `java.time` object."
+  [^String s]
+  (parse-with-formatter formatter s))

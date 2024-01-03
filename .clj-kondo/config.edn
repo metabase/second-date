@@ -12,15 +12,19 @@
 
   :consistent-alias
   {:aliases
-   {clojure.data          data
-    clojure.edn           edn
-    clojure.java.io       io
-    clojure.pprint        pprint
-    clojure.spec.alpha    s
-    clojure.string        str
-    clojure.tools.logging tools.log
-    clojure.walk          walk
-    potemkin              p}}
+   {clojure.data              data
+    clojure.edn               edn
+    clojure.java.io           io
+    clojure.pprint            pprint
+    clojure.spec.alpha        s
+    clojure.string            str
+    clojure.tools.logging     log
+    clojure.walk              walk
+    java-time.api             t
+    second-date.core          date
+    second-date.common        common
+    second-date.parse         parse
+    second-date.parse.builder b}}
 
   :discouraged-var
   {clojure.core/pr       {:message "Use clojure.tools.logging instead."}
@@ -37,6 +41,7 @@
   :keyword-binding                       {:level :warning}
   :misplaced-docstring                   {:level :warning}
   :missing-body-in-when                  {:level :warning}
+  :missing-docstring                     {:level :warning}
   :missing-else-branch                   {:level :warning}
   :namespace-name-mismatch               {:level :warning}
   :non-arg-vec-return-type-hint          {:level :warning}
@@ -48,8 +53,6 @@
   :use                                   {:level :warning}
   :used-underscored-binding              {:level :warning}
   :warn-on-reflection                    {:level :warning}
-  :docstring-no-summary                  {:level :warning}
-  :missing-docstring                     {:level :warning}
 
   :second-date/validate-deftest {:level :warning}}
 

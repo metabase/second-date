@@ -1,10 +1,8 @@
-[![Downloads](https://versions.deps.co/metabase/second-date/downloads.svg)](https://versions.deps.co/metabase/second-date)
-[![Dependencies Status](https://versions.deps.co/metabase/second-date/status.svg)](https://versions.deps.co/metabase/second-date)
-[![Circle CI](https://circleci.com/gh/metabase/second-date.svg?style=svg)](https://circleci.com/gh/metabase/second-date)
-[![License](https://img.shields.io/badge/license-Eclipse%20Public%20License-blue.svg)](https://raw.githubusercontent.com/metabase/second-date/master/LICENSE)
-[![cljdoc badge](https://cljdoc.org/badge/metabase/second-date)](https://cljdoc.org/d/metabase/second-date/CURRENT)
+[![License](https://img.shields.io/badge/license-Eclipse%20Public%20License-blue.svg?style=for-the-badge)](https://raw.githubusercontent.com/metabase/second-date/master/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/metabase/second-date?style=for-the-badge)](https://github.com/metabase/second-date/commits/)
+<!-- [![Codecov](https://img.shields.io/codecov/c/github/metabase/second-date?style=for-the-badge)](https://codecov.io/gh/metabase/second-date) -->
+[![cljdoc badge](https://img.shields.io/badge/dynamic/json?color=informational&label=cljdoc&query=results%5B%3F%28%40%5B%22artifact-id%22%5D%20%3D%3D%20%22toucan2%22%29%5D.version&url=https%3A%2F%2Fcljdoc.org%2Fapi%2Fsearch%3Fq%3Dio.github.camsaul%2Ftoucan2&style=for-the-badge)](https://cljdoc.org/d/io.github.metabase/second-date/CURRENT)
 
-[![Clojars Project](https://clojars.org/metabase/second-date/latest-version.svg)](http://clojars.org/metabase/second-date)
 
 # Second Date
 
@@ -34,6 +32,33 @@ Can parse almost any temporal literal String to the correct `java.time` class.
 ```
 
 `parse` handles ISO-8601 strings as well as SQL literals (e.g. `2020-04-01 15:01:00`).
+
+You can also use the built-in literal reader `second-date/t`:
+
+```clj
+#second-date/t "2020-04-01T15:01"
+;; -> #object[java.time.LocalDateTime 0x121829b7 "2020-04-01T15:01"]
+```
+
+For more convenience, you may want to give this a shorter data reader tag, for example `#t`, in your own project.
+
+Optionally, you can also have Second Date print Temporals in a REPL-friendly format by installing print methods with
+`second-date/install-print-methods!`:
+
+```clj
+#second-date/t "2020-04-01T15:01"
+;; -> #object[java.time.LocalDateTime 0x121829b7 "2020-04-01T15:01"]
+
+(second-date/install-print-methods!)
+#second-date/t "2020-04-01T15:01"
+;; -> #second-date/t "2020-04-01T15:01"
+
+;; use a different data reader tag
+(second-date/install-print-methods! 't)
+
+#t "2020-04-01T15:01"
+;; -> #t "2020-04-01T15:01"
+```
 
 ###### `format`
 

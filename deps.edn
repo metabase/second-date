@@ -1,10 +1,11 @@
 {:paths
- ["src"]
+ ["src" "resources"]
 
  :deps
  {clojure.java-time/clojure.java-time {:mvn/version "1.4.2"}
-  org.threeten/threeten-extra         {:mvn/version "1.7.2"}
-  potemkin/potemkin                   {:mvn/version "0.4.7"}}
+  org.apache.commons/commons-lang3    {:mvn/version "3.14.0"}
+  org.clojure/tools.logging           {:mvn/version "1.2.4"}
+  org.threeten/threeten-extra         {:mvn/version "1.7.2"}}
 
  :aliases
  {:dev
@@ -16,6 +17,8 @@
 
    :jvm-opts
    ["-Duser.timezone=UTC"
+    "-Duser.language=en"
+    "-Duser.country=US"
     ;; if compilation on launch fails or whatever print to console instead of a temp file.
     "-Dclojure.main.report=stderr"
     ;; [LEVEL logger-name] message stacktrace
@@ -23,7 +26,11 @@
     ;; Exceptions that get thrown repeatedly are created without stacktraces as a performance optimization in newer Java
     ;; versions. This makes debugging pretty hard when working on stuff locally -- prefer debuggability over performance
     ;; for local dev work.
-    "-XX:-OmitStackTraceInFastThrow"]}
+    "-XX:-OmitStackTraceInFastThrow"
+    ;; ignore options that aren't present in older versions of Java, like the one below:
+    "-XX:+IgnoreUnrecognizedVMOptions"
+    ;; include more details for debugging NPEs (Java 14+)
+    "-XX:+ShowCodeDetailsInExceptionMessages"]}
 
   ;; clojure -M:check
   :check
