@@ -2,6 +2,8 @@
 *.jar
 .\#*
 /*.iml
+/.clj-kondo/.cache
+/.cpcache
 /.eastwood
 /.env
 /.envrc

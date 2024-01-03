@@ -1,15 +1,18 @@
 (ns second-date.parse.builder
-  "Utility functions for programatically building a `DateTimeFormatter`. Easier to understand than chaining a hundred
+  "Utility functions for programmatically building a `DateTimeFormatter`. Easier to understand than chaining a hundred
   Java calls and trying to keep the structure straight.
 
   The basic idea here is you pass a number of `sections` to `formatter` to build a `DateTimeFormatter` — see
   `second-date.parse` for examples. Most of these sections are simple wrappers around corresponding
   `DateTimeFormatterBuilder` -- see
-  https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatterBuilder.html for documenation.
+  https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatterBuilder.html for documentation."
+  (:require
+   [second-date.common :as common])
+  (:import
+   (java.time.format DateTimeFormatter DateTimeFormatterBuilder SignStyle)
+   (java.time.temporal TemporalField)))
 
-  TODO - this is a prime library candidate."
-  (:require [second-date.common :as common])
-  (:import [java.time.format DateTimeFormatter DateTimeFormatterBuilder SignStyle] java.time.temporal.TemporalField))
+(set! *warn-on-reflection* true)
 
 (defprotocol ^:private Section
   (^:private apply-section [this builder]))
@@ -114,15 +117,15 @@
 
 (defn default-value
   "Define a section that sets a default value for a field like `:minute-of-hour`."
-  [temporal-field-name default-value]
+  [temporal-field-name default-val]
   (fn [^DateTimeFormatterBuilder builder]
-    (.parseDefaulting builder (temporal-field temporal-field-name) default-value)))
+    (.parseDefaulting builder (temporal-field temporal-field-name) default-val)))
 
 (defn fraction
   "Define a section for a fractional value, e.g. milliseconds or nanoseconds."
-  [temporal-field-name min-val-width max-val-width & {:keys [decimal-point?]}]
+  [temporal-field-name _min-val-width _max-val-width & {:keys [decimal-point?]}]
   (fn [^DateTimeFormatterBuilder builder]
-    (.appendFraction builder (temporal-field temporal-field-name) min-val-width max-val-width (boolean decimal-point?))))
+    (.appendFraction builder (temporal-field temporal-field-name) 0 9 (boolean decimal-point?))))
 
 (defn zone-offset
   "Define a section for a timezone offset. e.g. `-08:00`."
