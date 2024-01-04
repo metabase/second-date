@@ -4,6 +4,10 @@
 
 [![Clojars Project](https://clojars.org/metabase/second-date/latest-version.svg)](https://clojars.org/metabase/second-date)
 
+![OIG2](https://github.com/metabase/second-date/assets/1455846/db59a1ad-ee86-469b-b96e-2f515f28d06f)
+
+(Thanks Bing Image Creator for this totally accurate protrayal of a Clojure library for working with datetimes that is also a second date)
+
 # Second Date
 
 Second Date provides a handful of utility functions for working with `java.time`. The most important are:
