@@ -2,7 +2,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/metabase/second-date?style=for-the-badge)](https://github.com/metabase/second-date/commits/)
 [![cljdoc badge](https://img.shields.io/badge/dynamic/json?color=informational&label=cljdoc&query=results%5B%3F%28%40%5B%22artifact-id%22%5D%20%3D%3D%20%22toucan2%22%29%5D.version&url=https%3A%2F%2Fcljdoc.org%2Fapi%2Fsearch%3Fq%3Dio.github.metabase%2Fsecond-date&style=for-the-badge)](https://cljdoc.org/d/io.github.metabase/second-date/CURRENT)
 
-[![Clojars Project](https://clojars.org/io.github.metabase/second-date/latest-version.svg)](https://clojars.org/io.github.metabase/second-date)
+[![Clojars Project](https://clojars.org/metabase/second-date/latest-version.svg)](https://clojars.org/metabase/second-date)
 
 # Second Date
 
