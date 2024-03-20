@@ -13,7 +13,7 @@
                             #_(= (last (str sexpr)) \!))
                     (hooks/reg-finding! (assoc (meta form)
                                                :message (format "%s is not allowed inside a ^:parallel test" sexpr)
-                                               :type :toucan2/validate-deftest)))))))
+                                               :type :second-date/validate-deftest)))))))
           (walk [form]
             (f form)
             (doseq [child (:children form)]
