@@ -15,14 +15,14 @@
   conversions, turning `ID` into `ıd`, in the Turkish locale. This function always uses the `en-US` locale."
   ^String [s]
   (when s
-    (.toLowerCase (str s) (Locale/US))))
+    (.toLowerCase (str s) Locale/US)))
 
 (defn upper-case-en
   "Locale-agnostic version of [[clojure.string/upper-case]]. [[clojure.string/upper-case]] uses the default locale in
   conversions, turning `id` into `İD`, in the Turkish locale. This function always uses the `en-US` locale."
   ^String [s]
   (when s
-    (.toUpperCase (str s) (Locale/US))))
+    (.toUpperCase (str s) Locale/US)))
 
 (defprotocol CoerceToLocale
   "Protocol for anything that can be coerced to a `java.util.Locale`."
